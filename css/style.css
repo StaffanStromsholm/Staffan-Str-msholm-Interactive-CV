@@ -1,3 +1,27 @@
 body {
     height: 50000px;
+    font-family: 'Press Start 2P', cursive;
 }
+
+#main-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+#main-text h1::after {
+    content: "click anywhere to fly";
+    width: 100%;
+    height: 100%;
+    animation-name: blinking;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes blinking {
+    50% {opacity: 0;}
+}
+
+
