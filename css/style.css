@@ -20,8 +20,13 @@ body {
     animation-timing-function: linear;
 }
 
+h2 {
+    color: black;
+    background-color: white;
+    padding: 2rem;
+    border: 2px solid black;
+}
+
 @keyframes blinking {
     50% {opacity: 0;}
 }
-
-
