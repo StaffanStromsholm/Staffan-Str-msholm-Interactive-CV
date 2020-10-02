@@ -77,43 +77,40 @@ class Bird {
         })
     }
 
+    //Gravity mechanism
     addGravity() {
         var scope = this;
-        var clientHeight = parseInt(window.clientHeight);
+
         var gravityInterval = setInterval(function () {
-            if (scope.style.top == '100%') {
-                console.log(clientHeight);
-                let event = new Event('gameOver');
-                this.dispatchEvent(event);
-            }
             if (scope.jumping) {
                 return;
             }
+            var _current = parseInt(scope.style.top);
+
+            if (_current == 93) {
+                console.log(_current);
+                let fallenBird = new Event('FALLEN_BIRD');
+                document.dispatchEvent(fallenBird);
+            }
+
             var _current = parseInt(scope.style.top);
 
             var _new = _current < 93 ? _current + 1 : _current;
             scope.style.top = _new;
 
             document.getElementById(scope.id).style.top = `${_current}%`;
-
-            if (scope.style.top === 93) {
-                scope.gameOver = true;
-                clearInterval(backgroundScrollInterval);
-                clearInterval(gravityInterval);
-
-
-            }
         }, 1000 / 40);
         window.gravityInterval = gravityInterval;
     }
 
     jump() {
+
         if (this.gameOver) {
             return;
         }
+
         var scope = this;
         var counter = 0;
-
         this.jumping = true;
 
         setInterval(function () {
@@ -125,7 +122,6 @@ class Bird {
             counter++;
             var _new = _current > 1 ? _current - 2 : _current;
             scope.style.top = _new;
-
             document.getElementById(scope.id).style.top = `${_current}%`;
         }, 1000 / 75)
     }
@@ -195,34 +191,12 @@ class Info {
     window.addEventListener('mousedown', function () {
         bird.jump();
     })
-    window.addEventListener('gameOver', function () {
+    document.addEventListener('FALLEN_BIRD', function () {
         console.log('game over')
+
         clearInterval(backgroundScrollInterval);
         clearInterval(gravityInterval);
+        bird.gameOver = true;
     })
     window.backgroundScrollInterval = backgroundScrollInterval;
 })();
-
-// $(document).ready(function(){
-//     var background = new Background(
-//         document.getElementById('background')
-//     );
-
-//     document.addEventListener('scroll', function(){
-//         var offset = window.scrollY;
-
-//         background.scrollSideWay(offset);
-//         pipe1.moveLeft(offset)
-//         pipe2.moveLeft(offset)
-//         pipe3.moveLeft(offset)
-//         pipe4.moveLeft(offset)
-//         pipe5.moveLeft(offset)
-//     })
-
-//     var pipe1 = new Pipe(document.body);
-//     var pipe2 = new Pipe(document.body);
-//     var pipe3 = new Pipe(document.body);
-//     var pipe4 = new Pipe(document.body);
-//     var pipe5 = new Pipe(document.body);
-// });
-
