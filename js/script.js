@@ -1,5 +1,5 @@
 class Background {
-    constructor(el, bg = '../img/bg.png') {
+    constructor(el, bg = './img/bg.png') {
         this.el = el;
         this.style = {
             left: 0,
@@ -25,7 +25,7 @@ class Background {
 class Pipe {
     constructor(parentEl) {
         this.id = 'pipe_' + Math.floor(Math.random() * 2000);
-        this.imgSrc = '../img/pipe.png';
+        this.imgSrc = './img/pipe.png';
         this.size = null;
         this.style = {
             position: 'fixed',
@@ -54,7 +54,7 @@ class Bird {
     constructor(parentEl) {
         this.gameOver = false;
         this.id = 'bird_';
-        this.imgSrc = '../img/bird.png';
+        this.imgSrc = './img/bird.png';
         this.jumping = false;
         this.style = {
             position: 'fixed',
@@ -153,23 +153,26 @@ class Info {
     }
 }
 
-(function () {
-    var background = new Background(document.getElementById('background'));
-    var bird = new Bird(document.getElementById('background'));
-    var pipes = new Array(20);
+function init() {
+    document.getElementById('main-text').innerHTML = '';
+    document.querySelector('#countdown-text p').innerText = '';
 
-    var info = new Info(document.getElementById('main-text'), '1000px', '30%', `Hi! My name is Staffan Strömsholm, I'm a web developer`);
-    var info2 = new Info(document.getElementById('main-text'), '1700px', '20%', `I built this with HTML, CSS and Javascript`);
-    var info3 = new Info(document.getElementById('main-text'), '2400px', '20%', `I will tell you a bit more about myself, just don't fall down`);
-    var info4 = new Info(document.getElementById('main-text'), '3100px', '40%', `Languages and technologies I like to use:`);
-    var info5 = new Info(document.getElementById('main-text'), '3500px', '36%', `HTML`);
-    var info6 = new Info(document.getElementById('main-text'), '3900px', '33%', `CSS`);
-    var info7 = new Info(document.getElementById('main-text'), '4300px', '38%', `Javascript`);
-    var info8 = new Info(document.getElementById('main-text'), '4700px', '35%', `NodeJS`);
+    const background = new Background(document.getElementById('background'));
+    const bird = new Bird(document.getElementById('background'));
+    const pipes = new Array(20);
+
+    const info = new Info(document.getElementById('main-text'), '1000px', '30%', `Hi! My name is Staffan Strömsholm, I'm a web developer`);
+    const info2 = new Info(document.getElementById('main-text'), '1700px', '20%', `I built this with HTML, CSS and Javascript`);
+    const info3 = new Info(document.getElementById('main-text'), '2400px', '20%', `I will tell you a bit more about myself, just don't fall down`);
+    const info4 = new Info(document.getElementById('main-text'), '3100px', '40%', `Languages and technologies I like to use:`);
+    const info5 = new Info(document.getElementById('main-text'), '3500px', '36%', `HTML`);
+    const info6 = new Info(document.getElementById('main-text'), '3900px', '33%', `CSS`);
+    const info7 = new Info(document.getElementById('main-text'), '4300px', '38%', `Javascript`);
+    const info8 = new Info(document.getElementById('main-text'), '4700px', '35%', `NodeJS`);
 
 
 
-    var infoArr = [info, info2, info3, info4, info5, info6, info7, info8];
+    const infoArr = [info, info2, info3, info4, info5, info6, info7, info8];
 
     for (var i = 0; i < pipes.length; i++) {
         pipes[i] = new Pipe(document.body);
@@ -199,4 +202,20 @@ class Info {
         bird.gameOver = true;
     })
     window.backgroundScrollInterval = backgroundScrollInterval;
+};
+
+function countDown() {
+    document.querySelector('#countdown-text p').innerText = '3';
+    setTimeout(function () {
+        document.querySelector('#countdown-text p').innerText = '2';
+        setTimeout(function () {
+            document.querySelector('#countdown-text p').innerText = '1';
+        }, 1000);
+    }, 1000);
+}
+
+(function () {
+    var background = new Background(document.getElementById('background'));
+    countDown();
+    setTimeout(init, 3000);
 })();
