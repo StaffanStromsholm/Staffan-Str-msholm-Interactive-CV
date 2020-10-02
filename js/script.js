@@ -135,7 +135,6 @@ class Info {
             position: 'fixed',
             top: topOffset,
             left: leftOffset,
-            width: '50%',
             bottom: null
         };
 
@@ -161,14 +160,14 @@ function init() {
     const bird = new Bird(document.getElementById('background'));
     const pipes = new Array(20);
 
-    const info = new Info(document.getElementById('main-text'), '1000px', '30%', `Hi! My name is Staffan Strömsholm, I'm a web developer`);
-    const info2 = new Info(document.getElementById('main-text'), '1700px', '20%', `I built this with HTML, CSS and Javascript`);
-    const info3 = new Info(document.getElementById('main-text'), '2400px', '20%', `I will tell you a bit more about myself, just don't fall down`);
-    const info4 = new Info(document.getElementById('main-text'), '3100px', '40%', `Languages and technologies I like to use:`);
-    const info5 = new Info(document.getElementById('main-text'), '3500px', '36%', `HTML`);
-    const info6 = new Info(document.getElementById('main-text'), '3900px', '33%', `CSS`);
-    const info7 = new Info(document.getElementById('main-text'), '4300px', '38%', `Javascript`);
-    const info8 = new Info(document.getElementById('main-text'), '4700px', '35%', `NodeJS`);
+    const info = new Info(document.getElementById('main-text'), '1500px', '30%', `Hi! My name is Staffan Strömsholm, I'm a web developer`);
+    const info2 = new Info(document.getElementById('main-text'), '2000px', '30%', `I built this with HTML, CSS and Javascript`);
+    const info3 = new Info(document.getElementById('main-text'), '2500px', '30%', `I will tell you a bit more about myself, just don't fall down`);
+    const info4 = new Info(document.getElementById('main-text'), '3000px', '30%', `Languages and technologies I like to use:`);
+    const info5 = new Info(document.getElementById('main-text'), '3500px', '30%', `HTML`);
+    const info6 = new Info(document.getElementById('main-text'), '4000px', '30%', `CSS`);
+    const info7 = new Info(document.getElementById('main-text'), '4500px', '30%', `Javascript`);
+    const info8 = new Info(document.getElementById('main-text'), '5000px', '30%', `NodeJS`);
 
 
 
@@ -191,7 +190,7 @@ function init() {
         _distance += 100;
     }, 10);
 
-    window.addEventListener('mousedown', function () {
+    window.addEventListener('mousedown' || 'touchstart', function () {
         bird.jump();
     })
     document.addEventListener('FALLEN_BIRD', function () {

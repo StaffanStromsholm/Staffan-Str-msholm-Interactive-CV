@@ -19,10 +19,12 @@ body {
 }
 
 h2 {
+    display: inline-block;
     color: black;
     background-color: white;
     padding: 2rem;
     border: 2px solid black;
+    width: 400px
 }
 
 @keyframes blinking {
