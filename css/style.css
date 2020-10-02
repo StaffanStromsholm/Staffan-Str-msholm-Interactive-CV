@@ -177,3 +177,9 @@ body {
     font-family: 'Press Start 2P', cursive;
   }
   
+  #try-again {
+      padding: 1rem;
+      background-color: black;
+      color: white;
+      border: none;
+  }

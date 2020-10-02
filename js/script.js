@@ -71,10 +71,6 @@ class Bird {
 
         parentEl.appendChild(birdEl);
         this.addGravity();
-        birdEl.addEventListener('gameOver', function () {
-            console.log('game over')
-            clearInterval(backgroundScrollInterval);
-        })
     }
 
     //Gravity mechanism
@@ -154,11 +150,18 @@ class Info {
 }
 
 function init() {
+    // var fallenBirds = document.getElementsByClassName('fallen-bird');
+    // if (fallenBirds) {
+    //     fallenBirds.forEach((bird) => {
+    //         bird.style.marginLeft = '-1000px';
+    //     })
+    // }
+
     document.getElementById('main-text').innerHTML = '';
     document.querySelector('#countdown-text p').innerText = '';
 
     const background = new Background(document.getElementById('background'));
-    const bird = new Bird(document.getElementById('background'));
+    var bird = new Bird(document.getElementById('background'));
     const pipes = new Array(20);
 
     const info = new Info(document.getElementById('main-text'), '1500px', '30%', `Hi! My name is Staffan Strömsholm, I'm a web developer`);
@@ -181,10 +184,10 @@ function init() {
 
     var backgroundScrollInterval = setInterval(function () {
         if (_distance == 30000) {
-            document.querySelector('.tea-popup').classList.toggle('hidden');
-            document.querySelector('.tea-popup').style.opacity = '1';
-            document.querySelector('.tea-popup').style.marginLeft = '-385px';
-            document.querySelector('.tea-popup').style.transform = 'rotate(1080deg)'
+            clearInterval(gravityInterval);
+            rotateBird();
+            showPopup();
+            bird.gameOver = true;
         }
 
         background.scrollSideWay(_distance);
@@ -201,8 +204,15 @@ function init() {
         bird.jump();
     })
     document.addEventListener('FALLEN_BIRD', function () {
-        console.log('game over')
-
+        document.getElementById('bird_').classList.add = 'fallen-bird';
+        document.getElementById('countdown-text').innerHTML = '';
+        document.getElementById('main-text').innerHTML = `<h1>Game Over</h1>`
+        var button = document.createElement('input');
+        button.type = 'button';
+        button.value = 'Try Again';
+        button.id = 'try-again';
+        document.getElementById('countdown-text').appendChild(button);
+        button.onclick = restart;
         clearInterval(backgroundScrollInterval);
         clearInterval(gravityInterval);
         bird.gameOver = true;
@@ -217,6 +227,27 @@ function countDown() {
             document.querySelector('#countdown-text p').innerText = '1';
         }, 1000);
     }, 1000);
+}
+
+function showPopup() {
+    document.querySelector('.tea-popup').classList.toggle('hidden');
+    document.querySelector('.tea-popup').style.opacity = '1';
+    document.querySelector('.tea-popup').style.marginLeft = '-385px';
+}
+
+function rotateBird() {
+    var degrees = 0;
+    setInterval(function () {
+        document.getElementById('bird_').style.transform = `rotate(${degrees}deg)`
+        degrees += 20;
+    }, 1000 / 27)
+}
+
+function restart() {
+    document.getElementById('main-text').innerHTML = '';
+    document.querySelector('#countdown-text').innerHTML = '<p></p>';
+    countDown();
+    setTimeout(init, 3000);
 }
 
 (function () {
