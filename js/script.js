@@ -81,8 +81,8 @@ class Bird {
             if (scope.jumping) {
                 return;
             }
-            var _current = parseInt(scope.style.top);
 
+            var _current = parseInt(scope.style.top);
             if (_current == 93) {
                 console.log(_current);
                 let fallenBird = new Event('FALLEN_BIRD');
@@ -90,7 +90,6 @@ class Bird {
             }
 
             var _current = parseInt(scope.style.top);
-
             var _new = _current < 93 ? _current + 1 : _current;
             scope.style.top = _new;
 
@@ -104,7 +103,7 @@ class Bird {
         if (this.gameOver) {
             return;
         }
-
+        //make it possible to access this scope inside setInterval
         var scope = this;
         var counter = 0;
         this.jumping = true;
@@ -150,6 +149,39 @@ class Info {
     }
 }
 
+
+function countDown() {
+    document.querySelector('#countdown-text p').innerText = '3';
+    setTimeout(function () {
+        document.querySelector('#countdown-text p').innerText = '2';
+        setTimeout(function () {
+            document.querySelector('#countdown-text p').innerText = '1';
+        }, 1000);
+    }, 1000);
+}
+
+function showPopup() {
+    document.querySelector('.tea-popup').classList.toggle('hidden');
+    document.querySelector('.tea-popup').style.opacity = '1';
+    document.querySelector('.tea-popup').style.marginLeft = '-385px';
+}
+
+function rotateBird() {
+    var degrees = 0;
+    setInterval(function () {
+        document.getElementById('bird_').style.transform = `rotate(${degrees}deg)`
+        degrees += 20;
+    }, 1000 / 27)
+}
+
+function restart() {
+    document.getElementById('main-text').innerHTML = '';
+    document.querySelector('#countdown-text').innerHTML = '<p></p>';
+    countDown();
+    setTimeout(init, 3000);
+}
+
+//contains most of the logic to get things going
 function init() {
     //delete countdown text and instruction text
     document.getElementById('main-text').innerHTML = '';
@@ -161,6 +193,7 @@ function init() {
     // create pipes
     const pipes = new Array(20);
 
+    //create the info boxes
     const info = new Info(document.getElementById('main-text'), '1500px', '30%', `Hi! My name is Staffan Strömsholm, I'm a web developer`);
     const info2 = new Info(document.getElementById('main-text'), '2000px', '30%', `I built this with HTML, CSS and Javascript`);
     const info3 = new Info(document.getElementById('main-text'), '2500px', '30%', `I will tell you a bit more about myself, just don't fall down`);
@@ -169,9 +202,7 @@ function init() {
     const info6 = new Info(document.getElementById('main-text'), '4000px', '30%', `CSS`, 'center');
     const info7 = new Info(document.getElementById('main-text'), '4500px', '30%', `Javascript`, 'center');
     const info8 = new Info(document.getElementById('main-text'), '5000px', '30%', `NodeJS`, 'center');
-
-
-
+    //make an array of them to iterate over
     const infoArr = [info, info2, info3, info4, info5, info6, info7, info8];
 
     for (var i = 0; i < pipes.length; i++) {
@@ -179,8 +210,9 @@ function init() {
     }
     var _distance = 0;
 
+    //make background scroll automatically
     var backgroundScrollInterval = setInterval(function () {
-        if (_distance == 30000) {
+        if (_distance == 300000) {
             clearInterval(gravityInterval);
             rotateBird();
             showPopup();
@@ -216,37 +248,7 @@ function init() {
     })
 };
 
-function countDown() {
-    document.querySelector('#countdown-text p').innerText = '3';
-    setTimeout(function () {
-        document.querySelector('#countdown-text p').innerText = '2';
-        setTimeout(function () {
-            document.querySelector('#countdown-text p').innerText = '1';
-        }, 1000);
-    }, 1000);
-}
-
-function showPopup() {
-    document.querySelector('.tea-popup').classList.toggle('hidden');
-    document.querySelector('.tea-popup').style.opacity = '1';
-    document.querySelector('.tea-popup').style.marginLeft = '-385px';
-}
-
-function rotateBird() {
-    var degrees = 0;
-    setInterval(function () {
-        document.getElementById('bird_').style.transform = `rotate(${degrees}deg)`
-        degrees += 20;
-    }, 1000 / 27)
-}
-
-function restart() {
-    document.getElementById('main-text').innerHTML = '';
-    document.querySelector('#countdown-text').innerHTML = '<p></p>';
-    countDown();
-    setTimeout(init, 3000);
-}
-
+// ======IIFE======
 (function () {
     var background = new Background(document.getElementById('background'));
     countDown();
