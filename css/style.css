@@ -14,6 +14,10 @@ body {
     margin: 0 auto;
 }
 
+#main-text h2 {
+  
+}
+
 #main-text h1 {
     margin-top: 10%;
     animation-name: blinking;
@@ -48,14 +52,6 @@ body {
 }
 
 /* =========== POPUP ============ */
-
-/* body {
-    line-height: 1.5;
-    color: #555;
-    font-family: 'Lato', sans-serif;
-    background-color: #000;
-  } */
-  
   .tea-popup {
     position: absolute;
     opacity: 0;
