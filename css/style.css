@@ -1,3 +1,7 @@
+*{
+    box-sizing: border-box;
+}
+
 body {
     height: 50000px;
     font-family: 'Press Start 2P', cursive;
@@ -18,13 +22,13 @@ body {
     animation-timing-function: linear;
 }
 
-h2 {
+.info-text {
     display: inline-block;
     color: black;
     background-color: white;
     padding: 2rem;
     border: 2px solid black;
-    width: 400px
+    width: 400px;
 }
 
 @keyframes blinking {
@@ -43,3 +47,133 @@ h2 {
     font-size: 4rem;
 }
 
+/* =========== POPUP ============ */
+
+/* body {
+    line-height: 1.5;
+    color: #555;
+    font-family: 'Lato', sans-serif;
+    background-color: #000;
+  } */
+  
+  .tea-popup {
+    position: absolute;
+    opacity: 0;
+    width: 770px;
+    max-width: inherit;
+    padding: 0;
+    margin: 0 auto;
+    text-align: center;
+    background-color: rgb(1, 1, 1);
+    top: 0;
+    left: 50%;
+    margin-left: 700px;
+    transition: all 1s;
+  }
+
+  .hidden {
+      visibility: hidden;
+  }
+  
+  .tea-popup .close-popup {
+    font-size: 10px;
+    color: black;
+    text-transform: uppercase;
+    background: none;
+    border: 0;
+    position: absolute;
+    right: 0;
+    padding: 0;
+    top: -20px;
+    
+  }
+  
+  .tea-popup .close-popup i {
+    font-size: 8px;
+    margin-left: 3px;
+  }
+  
+  .white-popup {
+    background-color: black;
+  }
+  
+  .banner-newsletter {
+    float: left;
+    width: 270px;
+  }
+
+  .banner-newsletter img {
+      width: 100%;
+  }
+  
+  .kt-popup-newsletter {
+    position: relative;
+    overflow: hidden;
+    padding: 40px 50px;
+    text-align: center;
+    min-height: 350px;
+  }
+
+  .kt-popup-newsletter a {
+      color: rgb(196, 196, 196);
+  }
+  
+  .popup-title h1 {
+    font-size: 40px;
+    text-transform: uppercase;
+    color: rgb(196, 196, 196);
+    font-weight: bold;
+  }
+  
+  .popup-title .notice {
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+  
+  .popup-title .primary {
+    font-size: 17px;
+    color: #666;
+    color: #f4bf4e;
+    margin-bottom: 20px;
+    display: inline-block;
+    font-weight: 300;
+  }
+  
+  input#email {
+    width: 100%;
+    height: 54px;
+    border-color: rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 14px;
+    color: #cfcfcf;
+    margin-bottom: 1rem;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  textarea#message {
+    width: 100%;
+    height: 100px;
+    border-color: rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 14px;
+    color: #cfcfcf;
+    font-family: 'Press Start 2P', cursive;
+    padding: 1rem;
+  }
+  
+  button#submit {
+    width: 100%;
+    background-color: #e3504d;
+    height: 50px;
+    margin: 2rem 0;
+    font-size: 14px;
+    color: #fff;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    white-space: nowrap;
+    border: none;
+    text-transform: uppercase;
+    font-family: 'Press Start 2P', cursive;
+  }
+  

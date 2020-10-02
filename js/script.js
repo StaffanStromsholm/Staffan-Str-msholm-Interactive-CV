@@ -143,6 +143,7 @@ class Info {
         var infoEl = document.createElement('h2');
         infoEl.id = this.id;
         infoEl.innerText = this.text;
+        infoEl.classList.add('info-text');
         Object.assign(infoEl.style, this.style);
 
         parentEl.appendChild(infoEl);
@@ -179,6 +180,12 @@ function init() {
     var _distance = 0;
 
     var backgroundScrollInterval = setInterval(function () {
+        if (_distance == 30000) {
+            document.querySelector('.tea-popup').classList.toggle('hidden');
+            document.querySelector('.tea-popup').style.opacity = '1';
+            document.querySelector('.tea-popup').style.marginLeft = '-385px';
+            document.querySelector('.tea-popup').style.transform = 'rotate(1080deg)'
+        }
 
         background.scrollSideWay(_distance);
         pipes.forEach(function (pipe) {
@@ -200,7 +207,6 @@ function init() {
         clearInterval(gravityInterval);
         bird.gameOver = true;
     })
-    window.backgroundScrollInterval = backgroundScrollInterval;
 };
 
 function countDown() {
