@@ -53,7 +53,7 @@ class Pipe {
 class Bird {
     constructor(parentEl) {
         this.gameOver = false;
-        this.id = 'bird_';
+        this.id = 'bird_' + Math.floor(Math.random() * 2000);
         this.imgSrc = './img/bird.png';
         this.jumping = false;
         this.style = {
@@ -85,7 +85,7 @@ class Bird {
             var _current = parseInt(scope.style.top);
             if (_current == 93) {
                 console.log(_current);
-                let fallenBird = new Event('FALLEN_BIRD');
+                let fallenBird = new CustomEvent('FALLEN_BIRD', { 'detail': scope.id });
                 document.dispatchEvent(fallenBird);
             }
 
@@ -175,14 +175,20 @@ function rotateBird() {
 }
 
 function restart() {
+    console.log(document.querySelector('.fallen'));
     document.getElementById('main-text').innerHTML = '';
-    document.querySelector('#countdown-text').innerHTML = '<p></p>';
+    document.getElementById('countdown-text').innerHTML = '<p></p>';
     countDown();
     setTimeout(init, 3000);
+
 }
 
 //contains most of the logic to get things going
 function init() {
+
+    if (document.querySelector('.fallen') != null) {
+        document.querySelector('.fallen').style.marginLeft = '-1000px';
+    }
     //delete countdown text and instruction text
     document.getElementById('main-text').innerHTML = '';
     document.querySelector('#countdown-text p').innerText = '';
@@ -212,7 +218,7 @@ function init() {
 
     //make background scroll automatically
     var backgroundScrollInterval = setInterval(function () {
-        if (_distance == 300000) {
+        if (_distance == 290000) {
             clearInterval(gravityInterval);
             rotateBird();
             showPopup();
@@ -232,8 +238,9 @@ function init() {
     window.addEventListener('mousedown' || 'touchstart', function () {
         bird.jump();
     })
-    document.addEventListener('FALLEN_BIRD', function () {
-        document.getElementById('bird_').classList.add = 'fallen-bird';
+    document.addEventListener('FALLEN_BIRD', function (e) {
+        var fallenBird = document.getElementById(e.detail);
+        fallenBird.classList.add('fallen');
         document.getElementById('countdown-text').innerHTML = '';
         document.getElementById('main-text').innerHTML = `<h1>Game Over</h1>`
         var button = document.createElement('input');
