@@ -119,6 +119,15 @@ class Bird {
             document.getElementById(scope.id).style.top = `${_current}%`;
         }, 1000 / 75)
     }
+
+    moveRight() {
+        var scope = this;
+        var _current = parseInt(scope.style.left);
+        var _new = _current + 50;
+        scope.style.left = _new;
+        document.getElementById(scope.id).style.left = `${_current}px`;
+    }
+
 }
 
 class Info {
@@ -238,18 +247,29 @@ function init() {
         checkIfUserHasReachedEnd(_distance, bird);
 
         background.scrollSideWay(_distance);
+
         pipes.forEach(function (pipe) {
             pipe.moveLeft(_distance);
         })
+
         infoArr.forEach(function (info) {
             info.moveLeft(_distance);
         })
+
         _distance += 100;
     }, 10);
 
     window.addEventListener('mousedown' || 'touchstart', function () {
         bird.jump();
     })
+
+    window.addEventListener('keydown', function (e) {
+        console.log(e.key)
+        if (e.key === "ArrowRight") {
+            bird.moveRight();
+        }
+    })
+
     document.addEventListener('FALLEN_BIRD', function (e) {
         var fallenBird = document.getElementById(e.detail);
         fallenBird.classList.add('fallen');
