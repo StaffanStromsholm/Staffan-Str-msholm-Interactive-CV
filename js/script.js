@@ -103,8 +103,7 @@ class Bird {
         if (this.gameOver) {
             return;
         }
-        //make it possible to access this scope inside setInterval
-        var scope = this;
+        var scope = this; //make it possible to access this scope inside setInterval
         var counter = 0;
         this.jumping = true;
 
@@ -166,10 +165,10 @@ function showPopup() {
     document.querySelector('.tea-popup').style.marginLeft = '-385px';
 }
 
-function rotateBird() {
+function rotateBird(bird) {
     var degrees = 0;
     setInterval(function () {
-        document.getElementById('bird_').style.transform = `rotate(${degrees}deg)`
+        document.getElementById(bird.id).style.transform = `rotate(${degrees}deg)`
         degrees += 20;
     }, 1000 / 27)
 }
@@ -180,15 +179,31 @@ function restart() {
     document.getElementById('countdown-text').innerHTML = '<p></p>';
     countDown();
     setTimeout(init, 3000);
+}
 
+function moveFallenBirdsToLeft() {
+    if (document.querySelector('.fallen') != null) {
+        var fallenBirds = document.querySelectorAll('.fallen');
+        fallenBirds.forEach(function (fallenBird) {
+            fallenBird.style.marginLeft = '-1000px';
+        })
+    }
+}
+
+function checkIfUserHasReachedEnd(_distance, bird) {
+    if (_distance == 29000) {
+        clearInterval(gravityInterval);
+        rotateBird(bird);
+        showPopup();
+        bird.gameOver = true;
+    }
 }
 
 //contains most of the logic to get things going
 function init() {
+    //if there are fallen birds, move them 1000px to the left so they don't show
+    moveFallenBirdsToLeft();
 
-    if (document.querySelector('.fallen') != null) {
-        document.querySelector('.fallen').style.marginLeft = '-1000px';
-    }
     //delete countdown text and instruction text
     document.getElementById('main-text').innerHTML = '';
     document.querySelector('#countdown-text p').innerText = '';
@@ -216,14 +231,11 @@ function init() {
     }
     var _distance = 0;
 
+    var scope = this;
+
     //make background scroll automatically
     var backgroundScrollInterval = setInterval(function () {
-        if (_distance == 290000) {
-            clearInterval(gravityInterval);
-            rotateBird();
-            showPopup();
-            bird.gameOver = true;
-        }
+        checkIfUserHasReachedEnd(_distance, bird);
 
         background.scrollSideWay(_distance);
         pipes.forEach(function (pipe) {
