@@ -52,7 +52,6 @@ class Pipe {
 
 class Bird {
     constructor(parentEl) {
-        this.gameOver = false;
         this.id = 'bird_' + Math.floor(Math.random() * 2000);
         this.imgSrc = './img/bird.png';
         this.jumping = false;
@@ -84,7 +83,6 @@ class Bird {
 
             var _current = parseInt(scope.style.top);
             if (_current == 93) {
-                console.log(_current);
                 let fallenBird = new CustomEvent('FALLEN_BIRD', { 'detail': scope.id });
                 document.dispatchEvent(fallenBird);
             }
@@ -100,7 +98,7 @@ class Bird {
 
     jump() {
 
-        if (this.gameOver) {
+        if (model.gameOver) {
             return;
         }
         var scope = this; //make it possible to access this scope inside setInterval
@@ -121,11 +119,33 @@ class Bird {
     }
 
     moveRight() {
+        //cancel moveRight if gameOver or bird is near the right edge
+        if (model.gameOver || this.style.left >= (screen.width - 70)) {
+            return;
+        }
         var scope = this;
         var _current = parseInt(scope.style.left);
         var _new = _current + 50;
         scope.style.left = _new;
         document.getElementById(scope.id).style.left = `${_current}px`;
+    }
+    moveLeft() {
+        //cancel moveRight if gameOver or bird is near the left edge
+        if (model.gameOver || this.style.left <= -50) {
+            return;
+        }
+        var scope = this;
+        var _current = parseInt(scope.style.left);
+        var _new = _current - 50;
+        scope.style.left = _new;
+        document.getElementById(scope.id).style.left = `${_current}px`;
+    }
+    rotateBird(bird) {
+        var degrees = 0;
+        setInterval(function () {
+            document.getElementById(bird.id).style.transform = `rotate(${degrees}deg)`
+            degrees += 20;
+        }, 1000 / 27)
     }
 
 }
@@ -157,69 +177,101 @@ class Info {
     }
 }
 
+var model = {
+    gameOver : false
+}
 
-function countDown() {
-    document.querySelector('#countdown-text p').innerText = '3';
-    setTimeout(function () {
-        document.querySelector('#countdown-text p').innerText = '2';
+var view = {
+    showPopup: function () {
+        document.querySelector('.tea-popup').classList.toggle('hidden');
+        document.querySelector('.tea-popup').style.opacity = '1';
+        document.querySelector('.tea-popup').style.marginLeft = '-385px';
+    },
+    countDown: function () {
+        document.querySelector('#countdown-text p').innerText = '3';
         setTimeout(function () {
-            document.querySelector('#countdown-text p').innerText = '1';
+            document.querySelector('#countdown-text p').innerText = '2';
+            setTimeout(function () {
+                document.querySelector('#countdown-text p').innerText = '1';
+            }, 1000);
         }, 1000);
-    }, 1000);
+    },
+    initializeTexts: function () {
+        document.getElementById('main-text').innerHTML = '';
+        document.querySelector('#countdown-text p').innerText = '';
+    },
+    removeFallenBirds: function () {
+        if (document.querySelector('.fallen') != null) {
+            var fallenBirds = document.querySelectorAll('.fallen');
+            fallenBirds.forEach(function (fallenBird) {
+                fallenBird.style.display = 'none';
+            })
+        }
+    },
+    makeGameOverTextAndRetryButton: function() {
+        document.getElementById('countdown-text').innerHTML = '';
+        document.getElementById('main-text').innerHTML = `<h1>Game Over</h1>`
+        var button = document.createElement('input');
+        button.type = 'button';
+        button.value = 'Try Again';
+        button.id = 'try-again';
+        document.getElementById('countdown-text').appendChild(button);
+        button.onclick = controller.restart;
+    }
 }
 
-function showPopup() {
-    document.querySelector('.tea-popup').classList.toggle('hidden');
-    document.querySelector('.tea-popup').style.opacity = '1';
-    document.querySelector('.tea-popup').style.marginLeft = '-385px';
-}
-
-function rotateBird(bird) {
-    var degrees = 0;
-    setInterval(function () {
-        document.getElementById(bird.id).style.transform = `rotate(${degrees}deg)`
-        degrees += 20;
-    }, 1000 / 27)
-}
-
-function restart() {
-    console.log(document.querySelector('.fallen'));
-    document.getElementById('main-text').innerHTML = '';
-    document.getElementById('countdown-text').innerHTML = '<p></p>';
-    countDown();
-    setTimeout(init, 3000);
-}
-
-function moveFallenBirdsToLeft() {
-    if (document.querySelector('.fallen') != null) {
-        var fallenBirds = document.querySelectorAll('.fallen');
-        fallenBirds.forEach(function (fallenBird) {
-            fallenBird.style.marginLeft = '-1000px';
+var controller = {
+    checkIfUserHasReachedEnd: function (_distance, bird) {
+        if (_distance == 29000) {
+            clearInterval(gravityInterval);
+            bird.rotateBird(bird);
+            view.showPopup();
+            model.gameOver = true;
+        }
+    },
+    listenForKeypresses: function (bird) {
+        window.addEventListener('keydown', function (e) {
+            console.log(e)
+            if (e.key === 'ArrowRight') {
+                bird.moveRight();
+            } else if (e.key === ' ') {
+                bird.jump();
+            } else if (e.key === 'ArrowLeft') {
+                bird.moveLeft();
+            }
+            ;
         })
+    },
+    listenForJumps: function(bird){
+        window.addEventListener('mousedown' || 'touchstart', function () {
+            bird.jump();
+        })
+    },
+    restart: function() {
+        console.log(document.querySelector('.fallen'));
+        document.getElementById('main-text').innerHTML = '';
+        document.getElementById('countdown-text').innerHTML = '<p></p>';
+        view.countDown();
+        setTimeout(init, 3000);
     }
 }
 
-function checkIfUserHasReachedEnd(_distance, bird) {
-    if (_distance == 29000) {
-        clearInterval(gravityInterval);
-        rotateBird(bird);
-        showPopup();
-        bird.gameOver = true;
-    }
-}
+
 
 //contains most of the logic to get things going
 function init() {
-    //if there are fallen birds, move them 1000px to the left so they don't show
-    moveFallenBirdsToLeft();
+    //if there are fallen birds, set them to display: none
+    view.removeFallenBirds();
 
     //delete countdown text and instruction text
-    document.getElementById('main-text').innerHTML = '';
-    document.querySelector('#countdown-text p').innerText = '';
+    view.initializeTexts();
+
     //create the background
     const background = new Background(document.getElementById('background'));
+
     //create bird
     var bird = new Bird(document.getElementById('background'));
+
     // create pipes
     const pipes = new Array(20);
 
@@ -232,64 +284,46 @@ function init() {
     const info6 = new Info(document.getElementById('main-text'), '4000px', '30%', `CSS`, 'center');
     const info7 = new Info(document.getElementById('main-text'), '4500px', '30%', `Javascript`, 'center');
     const info8 = new Info(document.getElementById('main-text'), '5000px', '30%', `NodeJS`, 'center');
-    //make an array of them to iterate over
+
+    //make an array of info to iterate over
     const infoArr = [info, info2, info3, info4, info5, info6, info7, info8];
 
     for (var i = 0; i < pipes.length; i++) {
         pipes[i] = new Pipe(document.body);
     }
+    
+    //make background and pipes scroll automatically
     var _distance = 0;
-
-    var scope = this;
-
-    //make background scroll automatically
     var backgroundScrollInterval = setInterval(function () {
-        checkIfUserHasReachedEnd(_distance, bird);
-
+        controller.checkIfUserHasReachedEnd(_distance, bird);
         background.scrollSideWay(_distance);
-
         pipes.forEach(function (pipe) {
             pipe.moveLeft(_distance);
         })
-
         infoArr.forEach(function (info) {
             info.moveLeft(_distance);
         })
-
         _distance += 100;
     }, 10);
 
-    window.addEventListener('mousedown' || 'touchstart', function () {
-        bird.jump();
-    })
+    controller.listenForJumps(bird);
 
-    window.addEventListener('keydown', function (e) {
-        console.log(e.key)
-        if (e.key === "ArrowRight") {
-            bird.moveRight();
-        }
-    })
+    controller.listenForKeypresses(bird);
 
+    // controller.detectIfBirdHasFallen()
     document.addEventListener('FALLEN_BIRD', function (e) {
         var fallenBird = document.getElementById(e.detail);
         fallenBird.classList.add('fallen');
-        document.getElementById('countdown-text').innerHTML = '';
-        document.getElementById('main-text').innerHTML = `<h1>Game Over</h1>`
-        var button = document.createElement('input');
-        button.type = 'button';
-        button.value = 'Try Again';
-        button.id = 'try-again';
-        document.getElementById('countdown-text').appendChild(button);
-        button.onclick = restart;
+        view.makeGameOverTextAndRetryButton();
         clearInterval(backgroundScrollInterval);
         clearInterval(gravityInterval);
-        bird.gameOver = true;
+        model.gameOver = true;
     })
 };
 
 // ======IIFE======
 (function () {
     var background = new Background(document.getElementById('background'));
-    countDown();
+    view.countDown();
     setTimeout(init, 3000);
 })();
