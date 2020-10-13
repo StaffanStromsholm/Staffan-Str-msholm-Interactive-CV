@@ -14,7 +14,6 @@ var sound3 = new Howl({
     volume: 0.15
 });
 
-
 class Background {
     constructor(el, bg = './img/bg.png') {
         this.el = el;
