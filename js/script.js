@@ -1,3 +1,20 @@
+//jumping sound
+var sound = new Howl({
+    src: ['./sounds/sfx_movement_ladder1a.wav'],
+    volume: 0.15
+});
+//sound when bird has fallen
+var sound2 = new Howl({
+    src: ['./sounds/sfx_sounds_falling6.wav'],
+    volume: 0.15
+});
+//sound when popup opens
+var sound3 = new Howl({
+    src: ['./sounds/sfx_movement_portal1.wav'],
+    volume: 0.15
+});
+
+
 class Background {
     constructor(el, bg = './img/bg.png') {
         this.el = el;
@@ -61,7 +78,8 @@ class Bird {
             left: 50 + 'px',
             width: 100 + 'px'
         };
-        this.movementRatio = 20;
+        this.movementRatio = 35;
+        this.rotationRatio = 27;
 
         var birdEl = document.createElement('img');
         birdEl.src = this.imgSrc;
@@ -85,6 +103,7 @@ class Bird {
             if (_current == 93) {
                 let fallenBird = new CustomEvent('FALLEN_BIRD', { 'detail': scope.id });
                 document.dispatchEvent(fallenBird);
+                
             }
 
             var _current = parseInt(scope.style.top);
@@ -92,7 +111,7 @@ class Bird {
             scope.style.top = _new;
 
             document.getElementById(scope.id).style.top = `${_current}%`;
-        }, 1000 / 40);
+        }, 1000 / this.movementRatio);
         window.gravityInterval = gravityInterval;
     }
 
@@ -101,6 +120,7 @@ class Bird {
         if (model.gameOver) {
             return;
         }
+        sound.play()
         var scope = this; //make it possible to access this scope inside setInterval
         var counter = 0;
         this.jumping = true;
@@ -140,20 +160,21 @@ class Bird {
         scope.style.left = _new;
         document.getElementById(scope.id).style.left = `${_current}px`;
     }
+    //rotation magic
     rotateBird(bird) {
         var degrees = 0;
         setInterval(function () {
             document.getElementById(bird.id).style.transform = `rotate(${degrees}deg)`
             degrees += 20;
-        }, 1000 / 27)
+        }, 1000 / this.rotationRatio);
     }
 
 }
 
 class Info {
-    constructor(parentEl, leftOffset, topOffset, text, textAlign = 'none') {
+    constructor(parentEl, leftOffset, topOffset, innerHTML, textAlign = 'none') {
         this.id = 'info_' + Math.floor(Math.random() * 2000);
-        this.text = text;
+        this.innerHTML = innerHTML;
         this.style = {
             position: 'fixed',
             top: topOffset,
@@ -166,7 +187,7 @@ class Info {
 
         var infoEl = document.createElement('h2');
         infoEl.id = this.id;
-        infoEl.innerText = this.text;
+        infoEl.innerHTML = this.innerHTML;
         infoEl.classList.add('info-text');
         Object.assign(infoEl.style, this.style);
 
@@ -183,16 +204,23 @@ var model = {
 
 var view = {
     showPopup: function () {
+        sound3.play();
         document.querySelector('.tea-popup').classList.toggle('hidden');
         document.querySelector('.tea-popup').style.opacity = '1';
         document.querySelector('.tea-popup').style.marginLeft = '-385px';
     },
     countDown: function () {
-        document.querySelector('#countdown-text p').innerText = '3';
+        document.querySelector('#countdown-text p').innerText = '5';
         setTimeout(function () {
-            document.querySelector('#countdown-text p').innerText = '2';
+            document.querySelector('#countdown-text p').innerText = '4';
             setTimeout(function () {
-                document.querySelector('#countdown-text p').innerText = '1';
+                document.querySelector('#countdown-text p').innerText = '3';
+                setTimeout(function () {
+                    document.querySelector('#countdown-text p').innerText = '2';
+                    setTimeout(function () {
+                        document.querySelector('#countdown-text p').innerText = '1';
+                    }, 1000);
+                }, 1000);
             }, 1000);
         }, 1000);
     },
@@ -222,7 +250,7 @@ var view = {
 
 var controller = {
     checkIfUserHasReachedEnd: function (_distance, bird) {
-        if (_distance == 29000) {
+        if (_distance == 40000) {
             clearInterval(gravityInterval);
             bird.rotateBird(bird);
             view.showPopup();
@@ -231,18 +259,17 @@ var controller = {
     },
     listenForKeypresses: function (bird) {
         window.addEventListener('keydown', function (e) {
-            console.log(e)
             if (e.key === 'ArrowRight') {
                 bird.moveRight();
             } else if (e.key === ' ') {
                 bird.jump();
             } else if (e.key === 'ArrowLeft') {
                 bird.moveLeft();
-            }
-            ;
+            };
         })
     },
-    listenForJumps: function(bird){
+    listenForClicks: function(bird){
+        console.log(bird);
         window.addEventListener('mousedown' || 'touchstart', function () {
             bird.jump();
         })
@@ -252,7 +279,7 @@ var controller = {
         document.getElementById('main-text').innerHTML = '';
         document.getElementById('countdown-text').innerHTML = '<p></p>';
         view.countDown();
-        setTimeout(init, 3000);
+        setTimeout(init, 5000);
     }
 }
 
@@ -271,19 +298,20 @@ function init() {
 
     //create bird
     var bird = new Bird(document.getElementById('background'));
+    //push birds to array to be able to target last bird in array
 
     // create pipes
     const pipes = new Array(20);
 
     //create the info boxes
-    const info = new Info(document.getElementById('main-text'), '1500px', '30%', `Hi! My name is Staffan Strömsholm, I'm a web developer`);
-    const info2 = new Info(document.getElementById('main-text'), '2000px', '30%', `I built this with HTML, CSS and Javascript`);
-    const info3 = new Info(document.getElementById('main-text'), '2500px', '30%', `I will tell you a bit more about myself, just don't fall down`);
-    const info4 = new Info(document.getElementById('main-text'), '3000px', '30%', `Languages and technologies I like to use:`);
-    const info5 = new Info(document.getElementById('main-text'), '3500px', '30%', `HTML`, 'center');
-    const info6 = new Info(document.getElementById('main-text'), '4000px', '30%', `CSS`, 'center');
-    const info7 = new Info(document.getElementById('main-text'), '4500px', '30%', `Javascript`, 'center');
-    const info8 = new Info(document.getElementById('main-text'), '5000px', '30%', `NodeJS`, 'center');
+    const info = new Info(document.getElementById('main-text'), '1500px', '30%', `Hi! My name is Staffan Strömsholm, <br> welcome to my interactive CV.`);
+    const info2 = new Info(document.getElementById('main-text'), '2500px', '30%', `I am a student at Business College Helsinki studying fullstack development.`);
+    const info3 = new Info(document.getElementById('main-text'), '3500px', '30%', `I love programming, music and solving problems.`);
+    const info4 = new Info(document.getElementById('main-text'), '4500px', '30%', `Frontend technologies I use: <br>HTML, CSS, Javascript, Bootstrap`);
+    const info5 = new Info(document.getElementById('main-text'), '5500px', '30%', `Backend technologies I use: <br>NodeJS, Express`);
+    const info6 = new Info(document.getElementById('main-text'), '6500px', '30%', `Databases:<br>MongoDB`);
+    const info7 = new Info(document.getElementById('main-text'), '7500px', '30%', `Other technologies I use: <br>Git, GitHub`);
+    const info8 = new Info(document.getElementById('main-text'), '8500px', '30%', `I speak <br>1. Swedish: mother tongue <br>2. English: very good <br>3. Finnish: Fair`);
 
     //make an array of info to iterate over
     const infoArr = [info, info2, info3, info4, info5, info6, info7, info8];
@@ -306,12 +334,13 @@ function init() {
         _distance += 100;
     }, 10);
 
-    controller.listenForJumps(bird);
+
+    controller.listenForClicks(bird);
 
     controller.listenForKeypresses(bird);
 
-    // controller.detectIfBirdHasFallen()
     document.addEventListener('FALLEN_BIRD', function (e) {
+        sound2.play()
         var fallenBird = document.getElementById(e.detail);
         fallenBird.classList.add('fallen');
         view.makeGameOverTextAndRetryButton();
@@ -325,5 +354,5 @@ function init() {
 (function () {
     var background = new Background(document.getElementById('background'));
     view.countDown();
-    setTimeout(init, 3000);
+    setTimeout(init, 5000);
 })();
