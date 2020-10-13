@@ -249,7 +249,7 @@ var view = {
 
 var controller = {
     checkIfUserHasReachedEnd: function (_distance, bird) {
-        if (_distance == 40000) {
+        if (_distance == 400000) {
             clearInterval(gravityInterval);
             bird.rotateBird(bird);
             view.showPopup();
@@ -268,9 +268,19 @@ var controller = {
         })
     },
     listenForClicks: function(bird){
-        console.log(bird);
-        window.addEventListener('mousedown' || 'touchstart', function () {
+        window.addEventListener('mousedown' || 'touchstart', function (e) {
+            if(e.target.id === 'leftBtn' || e.target.id === 'rightBtn'){
+                return;
+            }
             bird.jump();
+        })
+    },
+    listenForButtonPresses: function(bird){
+        document.getElementById('leftBtn').addEventListener('click', function(){
+            bird.moveLeft();
+        })
+        document.getElementById('rightBtn').addEventListener('click', function(){
+            bird.moveRight();
         })
     },
     restart: function() {
@@ -337,6 +347,8 @@ function init() {
     controller.listenForClicks(bird);
 
     controller.listenForKeypresses(bird);
+
+    controller.listenForButtonPresses(bird);
 
     document.addEventListener('FALLEN_BIRD', function (e) {
         sound2.play()
