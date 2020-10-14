@@ -22,6 +22,11 @@ body {
     animation-timing-function: linear;
     padding: 5rem;
     font-size: 2rem;
+    text-align: center
+}
+
+@keyframes blinking {
+  50% {opacity: 0;}
 }
 
 #main-text h3 {
@@ -41,10 +46,6 @@ body {
     font-size: 0.9rem;
 }
 
-@keyframes blinking {
-    50% {opacity: 0;}
-}
-
 #countdown-text {
     display: flex;
     justify-content: center;
@@ -55,13 +56,6 @@ body {
 #countdown-text p {
     margin-top: 15%;
     font-size: 4rem;
-}
-
-#try-again {
-  padding: 1rem;
-  background-color: black;
-  color: white;
-  border: none;
 }
 
 .navigation-keys {
@@ -75,7 +69,7 @@ body {
   margin-left: -150px; 
 }
 
-.navigation-keys button {
+.navigation-keys button, #try-again{
   border: none;
   padding: 2rem;
   background-color: black;
@@ -88,6 +82,9 @@ body {
   font-family: 'Press Start 2P', cursive;
   font-size: 1.3rem;
   z-index: 0;
+}
+.navigation-keys button:focus {
+  font-size: 1.3rem;
 }
 
 /* =========== POPUP ============ */
@@ -226,6 +223,12 @@ body {
   
 /* Media queries */
 @media (max-width: 768px){
+  #main-text h3 {
+    padding: 1rem;
+      font-size: 0.8rem;
+      line-height: 2;
+  }
+
   .tea-popup {
     position: absolute;
     opacity: 0;
