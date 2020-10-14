@@ -251,7 +251,7 @@ var view = {
 
 var controller = {
     checkIfUserHasReachedEnd: function (_distance, bird) {
-        if (_distance == 400000) {
+        if (_distance == 4000) {
             clearInterval(gravityInterval);
             bird.rotateBird(bird);
             view.showPopup();
