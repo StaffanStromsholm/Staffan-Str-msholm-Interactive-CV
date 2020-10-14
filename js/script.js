@@ -99,14 +99,14 @@ class Bird {
             }
 
             var _current = parseInt(scope.style.top);
-            if (_current == 93) {
+            if (_current == 100) {
                 let fallenBird = new CustomEvent('FALLEN_BIRD', { 'detail': scope.id });
                 document.dispatchEvent(fallenBird);
                 
             }
 
             var _current = parseInt(scope.style.top);
-            var _new = _current < 93 ? _current + 1 : _current;
+            var _new = _current < 100 ? _current + 1 : _current;
             scope.style.top = _new;
 
             document.getElementById(scope.id).style.top = `${_current}%`;
@@ -243,7 +243,9 @@ var view = {
         button.value = 'Try Again';
         button.id = 'try-again';
         document.getElementById('countdown-text').appendChild(button);
-        button.onclick = controller.restart;
+        button.onclick = () => {
+            window.location.reload();
+        }
     }
 }
 
@@ -282,13 +284,6 @@ var controller = {
         document.getElementById('rightBtn').addEventListener('click', function(){
             bird.moveRight();
         })
-    },
-    restart: function() {
-        console.log(document.querySelector('.fallen'));
-        document.getElementById('main-text').innerHTML = '';
-        document.getElementById('countdown-text').innerHTML = '<p></p>';
-        view.countDown();
-        setTimeout(init, 5000);
     }
 }
 
@@ -307,7 +302,6 @@ function init() {
 
     //create bird
     var bird = new Bird(document.getElementById('background'));
-    //push birds to array to be able to target last bird in array
 
     // create pipes
     const pipes = new Array(20);
@@ -318,12 +312,12 @@ function init() {
     const info3 = new Info(document.getElementById('main-text'), '3500px', '30%', `I love programming, music and solving problems.`);
     const info4 = new Info(document.getElementById('main-text'), '4500px', '30%', `Frontend technologies I use: <br>HTML, CSS, Javascript, Bootstrap`);
     const info5 = new Info(document.getElementById('main-text'), '5500px', '30%', `Backend technologies I use: <br>NodeJS, Express`);
-    const info6 = new Info(document.getElementById('main-text'), '6500px', '30%', `Databases:<br>MongoDB`);
-    const info7 = new Info(document.getElementById('main-text'), '7500px', '30%', `Other technologies I use: <br>Git, GitHub`);
-    const info8 = new Info(document.getElementById('main-text'), '8500px', '30%', `I speak <br>1. Swedish: mother tongue <br>2. English: very good <br>3. Finnish: Fair`);
+    const info6 = new Info(document.getElementById('main-text'), '6500px', '30%', `Databases:<br>MongoDB`, 'center');
+    const info7 = new Info(document.getElementById('main-text'), '7500px', '30%', `Other technologies I use: <br>Git, GitHub`, 'center');
+    // const info8 = new Info(document.getElementById('main-text'), '8500px', '30%', `I speak <br>1. Swedish: mother tongue <br>2. English: very good <br>3. Finnish: Fair`);
 
     //make an array of info to iterate over
-    const infoArr = [info, info2, info3, info4, info5, info6, info7, info8];
+    const infoArr = [info, info2, info3, info4, info5, info6, info7];
 
     for (var i = 0; i < pipes.length; i++) {
         pipes[i] = new Pipe(document.body);
