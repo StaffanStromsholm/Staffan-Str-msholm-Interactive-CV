@@ -251,7 +251,7 @@ var view = {
 
 var controller = {
     checkIfUserHasReachedEnd: function (_distance, bird) {
-        if (_distance == 4000) {
+        if (_distance == 400000) {
             clearInterval(gravityInterval);
             bird.rotateBird(bird);
             view.showPopup();
@@ -308,7 +308,7 @@ function init() {
 
     //create the info boxes
     const info = new Info(document.getElementById('main-text'), '1500px', '30%', `Hi! My name is Staffan Strömsholm, <br> welcome to my interactive CV.`);
-    const info2 = new Info(document.getElementById('main-text'), '2500px', '30%', `I am a student at Business College Helsinki studying fullstack development.`);
+    const info2 = new Info(document.getElementById('main-text'), '2500px', '30%', `I am a student at Business College Helsinki studying fullstack web development.`);
     const info3 = new Info(document.getElementById('main-text'), '3500px', '30%', `I love programming, music and solving problems.`);
     const info4 = new Info(document.getElementById('main-text'), '4500px', '30%', `Frontend technologies I use: <br>HTML, CSS, Javascript, Bootstrap`);
     const info5 = new Info(document.getElementById('main-text'), '5500px', '30%', `Backend technologies I use: <br>NodeJS, Express`);

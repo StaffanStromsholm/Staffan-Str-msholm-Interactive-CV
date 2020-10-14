@@ -48,6 +48,41 @@ body {
     width: 300px;
     line-height: 1.5;
     font-size: 0.9rem;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.info-text:nth-child(2){
+  background-color: rgb(105, 189, 138);
+  color: white;
+}
+
+.info-text:nth-child(3){
+  background-color: rgb(105, 108, 189);
+  color: white;
+}
+
+.info-text:nth-child(4){
+  background-color: rgb(158, 105, 189);
+  color: white;
+}
+
+.info-text:nth-child(5){
+  background-color: rgb(28, 37, 160);
+  color: white;
+}
+
+.info-text:nth-child(6){
+  background-color: rgb(249, 191, 0);
+  color: white;
+}
+
+.info-text:nth-child(7){
+  background-color: rgb(16, 116, 56);
+  color: white;
 }
 
 #countdown-text {
