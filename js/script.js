@@ -230,6 +230,7 @@ var view = {
     removeFallenBirds: function () {
         if (document.querySelector('.fallen') != null) {
             var fallenBirds = document.querySelectorAll('.fallen');
+            //hide all fallen birds
             fallenBirds.forEach(function (fallenBird) {
                 fallenBird.style.display = 'none';
             })
@@ -244,19 +245,29 @@ var view = {
         button.id = 'try-again';
         document.getElementById('countdown-text').appendChild(button);
         button.onclick = () => {
-            window.location.reload();
+            window.location.reload(); //reload the whole page on click
         }
     }
 }
 
 var controller = {
     checkIfUserHasReachedEnd: function (_distance, bird) {
-        if (_distance == 400000) {
-            clearInterval(gravityInterval);
-            bird.rotateBird(bird);
-            view.showPopup();
-            model.gameOver = true;
+        if (window.innerWidth < '768') {
+            if (_distance == 630000) {
+                clearInterval(gravityInterval);
+                bird.rotateBird(bird);
+                view.showPopup();
+                model.gameOver = true;
+            }
+        } else {
+            if (_distance == 200000) {
+                clearInterval(gravityInterval);
+                bird.rotateBird(bird);
+                view.showPopup();
+                model.gameOver = true;
+            }
         }
+        
     },
     listenForKeypresses: function (bird) {
         window.addEventListener('keydown', function (e) {
@@ -287,8 +298,6 @@ var controller = {
     }
 }
 
-
-
 //contains most of the logic to get things going
 function init() {
     //if there are fallen birds, set them to display: none
@@ -307,14 +316,13 @@ function init() {
     const pipes = new Array(20);
 
     //create the info boxes
-    const info = new Info(document.getElementById('main-text'), '1500px', '30%', `Hi! My name is Staffan Strömsholm, <br> welcome to my interactive CV.`);
-    const info2 = new Info(document.getElementById('main-text'), '2500px', '30%', `I am a student at Business College Helsinki studying fullstack web development.`);
-    const info3 = new Info(document.getElementById('main-text'), '3500px', '30%', `I love programming, music and solving problems.`);
-    const info4 = new Info(document.getElementById('main-text'), '4500px', '30%', `Frontend technologies I use: <br>HTML, CSS, Javascript, Bootstrap`);
-    const info5 = new Info(document.getElementById('main-text'), '5500px', '30%', `Backend technologies I use: <br>NodeJS, Express`);
-    const info6 = new Info(document.getElementById('main-text'), '6500px', '30%', `Databases:<br>MongoDB`, 'center');
-    const info7 = new Info(document.getElementById('main-text'), '7500px', '30%', `Other technologies I use: <br>Git, GitHub`, 'center');
-    // const info8 = new Info(document.getElementById('main-text'), '8500px', '30%', `I speak <br>1. Swedish: mother tongue <br>2. English: very good <br>3. Finnish: Fair`);
+    const info = new Info(document.getElementById('main-text'), '500px', '30%', `Hi! My name is Staffan Strömsholm, <br> welcome to my interactive CV.`);
+    const info2 = new Info(document.getElementById('main-text'), '1000px', '30%', `I am a student at Business College Helsinki studying fullstack web development.`);
+    const info3 = new Info(document.getElementById('main-text'), '1500px', '30%', `I love programming, music and solving problems.`);
+    const info4 = new Info(document.getElementById('main-text'), '2000px', '30%', `Frontend technologies I use: <br>HTML, CSS, Javascript, Bootstrap`);
+    const info5 = new Info(document.getElementById('main-text'), '2500px', '30%', `Backend technologies I use: <br>NodeJS, Express`);
+    const info6 = new Info(document.getElementById('main-text'), '3000px', '30%', `Databases:<br>MongoDB`, 'center');
+    const info7 = new Info(document.getElementById('main-text'), '3500px', '30%', `Other technologies I use: <br>Git, GitHub`, 'center');
 
     //make an array of info to iterate over
     const infoArr = [info, info2, info3, info4, info5, info6, info7];
@@ -331,12 +339,21 @@ function init() {
         pipes.forEach(function (pipe) {
             pipe.moveLeft(_distance);
         })
-        infoArr.forEach(function (info) {
-            info.moveLeft(_distance);
-        })
+        //if users screen is less than 768px, make the info boxes move slower
+        if (window.innerWidth < '768') {
+            console.log('less than 768px');
+            infoArr.forEach(function (info) {
+                info.moveRatio = 170;
+                info.moveLeft(_distance);
+            })
+        } else {
+            infoArr.forEach(function (info) {
+                info.moveLeft(_distance);
+            })
+        }
+        
         _distance += 100;
     }, 10);
-
 
     controller.listenForClicks(bird);
 
