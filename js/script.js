@@ -48,7 +48,8 @@ class Pipe {
             top: null,
             left: Math.floor(Math.random() * 50000) + 'px',
             width: Math.floor(Math.random() * 200) + 'px',
-            bottom: 0
+            bottom: 0,
+            zIndex: 0 
         };
         this.flip = false;
         this.moveRatio = 20;
@@ -120,7 +121,7 @@ class Bird {
             return;
         }
         sound.play()
-        var scope = this; //make it possible to access this scope inside setInterval
+        var scope = this; //make it possible to access the right scope inside setInterval
         var counter = 0;
         this.jumping = true;
 
@@ -146,7 +147,7 @@ class Bird {
         var _current = parseInt(scope.style.left);
         var _new = _current + 50;
         scope.style.left = _new;
-        document.getElementById(scope.id).style.left = `${_current}px`;
+        document.getElementById(scope.id).style.left = `${_new}px`;
     }
     moveLeft() {
         //cancel moveRight if gameOver or bird is near the left edge
@@ -157,7 +158,7 @@ class Bird {
         var _current = parseInt(scope.style.left);
         var _new = _current - 50;
         scope.style.left = _new;
-        document.getElementById(scope.id).style.left = `${_current}px`;
+        document.getElementById(scope.id).style.left = `${_new}px`;
     }
     //rotation magic
     rotateBird(bird) {
@@ -252,6 +253,7 @@ var view = {
 
 var controller = {
     checkIfUserHasReachedEnd: function (_distance, bird) {
+        //if screen size is smaller the text will move slower which means the _distance variable will be greater than on bigger screens
         if (window.innerWidth < '768') {
             if (_distance == 630000) {
                 clearInterval(gravityInterval);
@@ -273,7 +275,7 @@ var controller = {
         window.addEventListener('keydown', function (e) {
             if (e.key === 'ArrowRight') {
                 bird.moveRight();
-            } else if (e.key === ' ') {
+            } else if (e.code === 'Space') {
                 bird.jump();
             } else if (e.key === 'ArrowLeft') {
                 bird.moveLeft();
@@ -282,23 +284,24 @@ var controller = {
     },
     listenForClicks: function(bird){
         window.addEventListener('mousedown' || 'touchstart', function (e) {
-            if(e.target.id === 'leftBtn' || e.target.id === 'rightBtn'){
+            //return if buttons or font awesome icons inside buttons are clicked
+            if(e.target.id === 'leftBtn' || e.target.id === 'rightBtn' || e.target.classList.contains('fas')){
                 return;
             }
             bird.jump();
         })
     },
     listenForButtonPresses: function(bird){
-        document.getElementById('leftBtn').addEventListener('click', function(){
+        document.getElementById('leftBtn').addEventListener('click', function(e){
             bird.moveLeft();
         })
-        document.getElementById('rightBtn').addEventListener('click', function(){
+        document.getElementById('rightBtn').addEventListener('click', function(e){
             bird.moveRight();
         })
+        
     }
 }
 
-//contains most of the logic to get things going
 function init() {
     //if there are fallen birds, set them to display: none
     view.removeFallenBirds();
@@ -312,7 +315,7 @@ function init() {
     //create bird
     var bird = new Bird(document.getElementById('background'));
 
-    // create pipes
+    // create empty pipes array
     const pipes = new Array(20);
 
     //create the info boxes
@@ -327,6 +330,7 @@ function init() {
     //make an array of info to iterate over
     const infoArr = [info, info2, info3, info4, info5, info6, info7];
 
+    //fill the pipes array
     for (var i = 0; i < pipes.length; i++) {
         pipes[i] = new Pipe(document.body);
     }
@@ -341,12 +345,12 @@ function init() {
         })
         //if users screen is less than 768px, make the info boxes move slower
         if (window.innerWidth < '768') {
-            console.log('less than 768px');
             infoArr.forEach(function (info) {
                 info.moveRatio = 170;
                 info.moveLeft(_distance);
             })
         } else {
+            //otherwise keep original moveRatio
             infoArr.forEach(function (info) {
                 info.moveLeft(_distance);
             })

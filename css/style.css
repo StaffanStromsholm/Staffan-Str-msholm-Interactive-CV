@@ -105,7 +105,8 @@ body {
   bottom: 0;
   left: 50%;
   width: 300px;
-  margin-left: -150px; 
+  margin-left: -150px;
+  z-index: 2;
 }
 
 .navigation-keys button, #try-again{
