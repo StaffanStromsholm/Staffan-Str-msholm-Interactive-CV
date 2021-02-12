@@ -160,7 +160,7 @@ class Bird {
         scope.style.left = _new;
         document.getElementById(scope.id).style.left = `${_new}px`;
     }
-    //rotation magic
+    //rotation magic, function to make bird rotate
     rotateBird(bird) {
         var degrees = 0;
         setInterval(function () {
@@ -183,7 +183,7 @@ class Info {
             textAlign: textAlign
         };
 
-        this.moveRatio = 50;
+        this.moveRatio = 100;
 
         var infoEl = document.createElement('h2');
         infoEl.id = this.id;
@@ -253,7 +253,7 @@ var view = {
 
 var controller = {
     checkIfUserHasReachedEnd: function (_distance, bird) {
-        //if screen size is smaller the text will move slower which means the _distance variable will be greater than on bigger screens
+        //if screen size is small, the text will move slower which means the _distance variable will be greater than on bigger screens
         if (window.innerWidth < '768') {
             if (_distance == 630000) {
                 clearInterval(gravityInterval);
@@ -262,7 +262,7 @@ var controller = {
                 model.gameOver = true;
             }
         } else {
-            if (_distance == 200000) {
+            if (_distance == 350000) {
                 clearInterval(gravityInterval);
                 bird.rotateBird(bird);
                 view.showPopup();
@@ -319,13 +319,13 @@ function init() {
     const pipes = new Array(20);
 
     //create the info boxes
-    const info = new Info(document.getElementById('main-text'), '500px', '30%', `Hi! My name is Staffan Strömsholm, <br> welcome to my interactive CV.`);
-    const info2 = new Info(document.getElementById('main-text'), '1000px', '30%', `I am a student at Business College Helsinki studying fullstack web development.`);
-    const info3 = new Info(document.getElementById('main-text'), '1500px', '30%', `I love programming, music and solving problems.`);
-    const info4 = new Info(document.getElementById('main-text'), '2000px', '30%', `Frontend technologies I use: <br>HTML, CSS, Javascript, Bootstrap`);
-    const info5 = new Info(document.getElementById('main-text'), '2500px', '30%', `Backend technologies I use: <br>NodeJS, Express`);
-    const info6 = new Info(document.getElementById('main-text'), '3000px', '30%', `Databases:<br>MongoDB`, 'center');
-    const info7 = new Info(document.getElementById('main-text'), '3500px', '30%', `Other technologies I use: <br>Git, GitHub`, 'center');
+    const info = new Info(document.getElementById('main-text'), '500px', '30%', `Hi! My name is Staffan Strömsholm, <br> welcome to my interactive CV! <br> Stick till the end, there might be a surprise.`);
+    const info2 = new Info(document.getElementById('main-text'), '1000px', '30%', `I live in Helsinki with my wife and two kids.`);
+    const info3 = new Info(document.getElementById('main-text'), '1500px', '30%', `I am a former piano teacher aiming towards becoming a web developer`);
+    const info4 = new Info(document.getElementById('main-text'), '2000px', '30%', `I study full stack web development at Business College Helsinki, the studies are intense and very hands on.`);
+    const info5 = new Info(document.getElementById('main-text'), '2500px', '30%', `The tech stacks we use rely heavily on javascript, such as React, Redux, NodeJS and Typescript.`);
+    const info6 = new Info(document.getElementById('main-text'), '3000px', '30%', `We have used SQL for the databases and on my personal projects I have also used NoSQL technologies like MongoDB`, 'center');
+    const info7 = new Info(document.getElementById('main-text'), '3500px', '30%', `I'm always available for a chat! Here it comes >>>>`, 'center');
 
     //make an array of info to iterate over
     const infoArr = [info, info2, info3, info4, info5, info6, info7];
