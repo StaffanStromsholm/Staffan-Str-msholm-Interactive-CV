@@ -306,7 +306,7 @@ function init() {
     //if there are fallen birds, set them to display: none
     view.removeFallenBirds();
 
-    //delete countdown text and instruction text
+    //initialize countdown text and instruction text
     view.initializeTexts();
 
     //create the background
