@@ -324,8 +324,8 @@ function init() {
     const info3 = new Info(document.getElementById('main-text'), '1500px', '30%', `I am a former piano teacher aiming towards becoming a web developer`);
     const info4 = new Info(document.getElementById('main-text'), '2000px', '30%', `I study full stack web development at Business College Helsinki, the studies are intense and very hands on.`);
     const info5 = new Info(document.getElementById('main-text'), '2500px', '30%', `The tech stacks we use rely heavily on javascript, such as React, Redux, NodeJS and Typescript.`);
-    const info6 = new Info(document.getElementById('main-text'), '3000px', '30%', `We have used SQL for the databases and on my personal projects I have also used NoSQL technologies like MongoDB`, 'center');
-    const info7 = new Info(document.getElementById('main-text'), '3500px', '30%', `I'm always available for a chat! Here it comes >>>>`, 'center');
+    const info6 = new Info(document.getElementById('main-text'), '3000px', '30%', `I am familiar with both SQL and NoSQL speaking databases`, 'center');
+    const info7 = new Info(document.getElementById('main-text'), '3500px', '30%', `I'm always available for a chat! <br> Here it comes >>>`, 'center');
 
     //make an array of info to iterate over
     const infoArr = [info, info2, info3, info4, info5, info6, info7];
